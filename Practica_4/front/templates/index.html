@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Bienvenido al Proyecto de Grafos</h1>
+
+    <h2>Grafo Actual</h2>
+    <p>Visualiza el grafo actual de los nodos y aristas.</p>
+    <div id="grafo"></div>
+
+    <h3>Operaciones</h3>
+    <ul>
+        <li><a href="{{ url_for('router.agregar_grafo') }}">Agregar Grafo</a></li>
+        <li><a href="{{ url_for('router.listar_grafos') }}">Ver Grafos</a></li>
+    </ul>
+{% endblock %}

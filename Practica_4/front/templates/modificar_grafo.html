@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Modificar Grafo</h1>
+<form method="POST">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" class="form-control" value="{{ grafo['nombre'] }}" required>
+    
+    <label for="descripcion">Descripción:</label>
+    <input type="text" id="descripcion" name="descripcion" class="form-control" value="{{ grafo['descripcion'] }}" required>
+    
+    <!-- Cambiar "vertices" a "paradas" -->
+    <label for="paradas">Paradas (nombre, id):</label>
+    <input type="text" id="paradas" name="paradas" class="form-control" 
+           value="{% for parada in grafo['paradas'] %}{{ parada['nombre'] }},{{ parada['id'] }}{% if not loop.last %};{% endif %}{% endfor %}" 
+           required>
+    
+    <!-- Cambiar "aristas" a "rutas" -->
+    <label for="rutas">Rutas (id1, id2, distancia):</label>
+    <input type="text" id="rutas" name="rutas" class="form-control" 
+           value="{% for ruta in grafo['rutas'] %}{{ ruta.origen.id }},{{ ruta.destino.id }},{{ ruta.distancia }}{% if not loop.last %};{% endif %}{% endfor %}" 
+           required>
+    
+    <button type="submit" class="btn btn-primary">Actualizar Grafo</button>
+</form>
+{% endblock %}

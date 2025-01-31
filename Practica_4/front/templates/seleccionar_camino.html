@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Calcular Camino Más Corto</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label for="algoritmo" class="form-label">Algoritmo</label>
+        <select class="form-select" id="algoritmo" name="algoritmo" required>
+            <option value="dijkstra">Dijkstra</option>
+            <option value="floyd">Floyd-Warshall</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="nodo_inicio" class="form-label">Parada de Inicio (ID)</label>
+        <input type="number" class="form-control" id="nodo_inicio" name="nodo_inicio" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="nodo_destino" class="form-label">Parada de Destino (ID)</label>
+        <input type="number" class="form-control" id="nodo_destino" name="nodo_destino" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Calcular</button>
+</form>
+
+<!-- Lista de paradas disponibles para referencia -->
+<h3 class="mt-4">Paradas Disponibles</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for grafo in grafos %}
+            {% for parada in grafo.paradas %}
+                <tr>
+                    <td>{{ parada.id }}</td>
+                    <td>{{ parada.nombre }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

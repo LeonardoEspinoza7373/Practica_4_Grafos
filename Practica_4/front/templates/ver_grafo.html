@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lista de Grafos</h2>
+
+{% if grafos %}
+    <div id="grafo_combined" style="width: 100%; height: 600px; border: 1px solid black; margin-bottom: 20px;"></div>
+
+    <script type="text/javascript" src="https://unpkg.com/vis-network@9.0.0/dist/vis-network.min.js"></script>
+
+    <script type="text/javascript">
+        var grafosData = {{ grafos | tojson }};
+        var nodes = new vis.DataSet([]);
+        var edges = new vis.DataSet([]);
+
+        grafosData.forEach(function(grafo) {
+            // Paradas como nodos
+            grafo.paradas.forEach(function(parada) {
+                nodes.add({
+                    id: parada.id,
+                    label: parada.nombre
+                });
+            });
+
+            // Rutas como aristas
+            grafo.rutas.forEach(function(ruta) {
+                edges.add({
+                    from: ruta.origen.id,
+                    to: ruta.destino.id,
+                    label: ruta.distancia + ' km',
+                    font: { align: 'middle' },
+                    color: { color: 'blue' }
+                });
+            });
+        });
+
+        var container = document.getElementById('grafo_combined');
+        var data = { nodes: nodes, edges: edges };
+        var options = { physics: true, nodes: { shape: 'dot', size: 10 }, edges: { arrows: { to: true } } };
+        var network = new vis.Network(container, data, options);
+    </script>
+
+    <h3>Ver Camino Más Corto</h3>
+    <a href="{{ url_for('router.seleccionar_camino') }}">
+        <button style="background-color: #4CAF50; color: white; padding: 10px;">Ver Camino Más Corto</button>
+    </a>
+    
+    <h3>Detalles de los Grafos</h3>
+    <table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Paradas</th>
+                <th>Rutas</th>
+                <th>Modificar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grafo in grafos %}
+                <tr>
+                    <td>{{ grafo.id }}</td>
+                    <td>{{ grafo.nombre }}</td>
+                    <td>{{ grafo.descripcion }}</td>
+                    <td>
+                        {% for parada in grafo.paradas %}
+                            {{ parada.nombre }} (ID: {{ parada.id }}){% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for ruta in grafo.rutas %}
+                            {{ ruta.origen.id }} → {{ ruta.destino.id }} ({{ ruta.distancia }} km){% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('router.modificar_grafo', id=grafo.id) }}">
+                            <button style="background-color: yellow; border: none; padding: 5px;">Modificar</button>
+                        </a>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('router.eliminar_grafo', id=grafo.id) }}" method="post" onsubmit="return confirm('¿Estás seguro de eliminar este grafo?');">
+                            <button style="background-color: red; color: white; border: none; padding: 5px;">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No se encontraron grafos.</p>
+{% endif %}
+{% endblock %}

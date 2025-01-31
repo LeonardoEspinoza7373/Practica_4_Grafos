@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Agregar Grafo</h2>
+<form action="{{ url_for('router.agregar_grafo') }}" method="POST">
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre del Grafo</label>
+        <input type="text" id="nombre" name="nombre" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <input type="text" id="descripcion" name="descripcion" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <!-- Cambiar "vertices" a "paradas" -->
+        <label for="paradas" class="form-label">Paradas (Formato: nombre,ID)</label>
+        <input type="text" id="paradas" name="paradas" class="form-control" placeholder="Ejemplo: A,1;B,2;C,3" required>
+        <small class="form-text text-muted">Ingrese las paradas con nombre y ID, separados por coma y cada parada por punto y coma.</small>
+    </div>
+    <div class="mb-3">
+        <!-- Cambiar "aristas" a "rutas" -->
+        <label for="rutas" class="form-label">Rutas (Formato: ID1,ID2,Distancia)</label>
+        <input type="text" id="rutas" name="rutas" class="form-control" placeholder="Ejemplo: 1,2,10.5;2,3,15.2" required>
+        <small class="form-text text-muted">Ingrese las rutas con IDs de las paradas y la distancia, separados por comas. Use punto y coma entre rutas.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Agregar Grafo</button>
+</form>
+{% endblock %}
